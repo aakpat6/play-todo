@@ -5,8 +5,8 @@ requirejs.config({
     app: '..',
 
     jquery: [
-      '//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min',
-      'jquery-1.9.0.min'
+    '//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min',
+    'jquery-1.9.0.min'
     ],
 
     bootstrap: 'bootstrap.min',
@@ -35,18 +35,30 @@ requirejs.config({
 });
 
 
-define(['bootstrap', 'underscore', 'mustache', 'templates'], function($, _, Mustache, Templates) {
-  $('h1').css('color', 'green');
-  $.ajax('/tasks', {
-    method: 'get',
-    success: function(result) {
-      var data = JSON.parse(result);
-      var tasksHtml = '';
-      _.each(data, function(label) {
-        tasksHtml += Mustache.render(Templates.task, {label: label});
-        console.log(Templates.task);
-      });
-      $('.tasks').html(tasksHtml);
-    }
-  });
-});
+define(['bootstrap', 'underscore', 'mustache', 'templates'],
+  function($, _, Mustache, Templates) {
+    $.ajax('/tasks', {
+      method: 'get',
+      success: function(result) {
+        var data = JSON.parse(result);
+        console.log(result);
+        var tasksHtml = '';
+        _.each(data, function(task) {
+          tasksHtml += Mustache.render(Templates.task, task);
+          console.log(task);
+        });
+        $('.tasks').html(tasksHtml);
+        $('.btn-delete').click(function() {
+          var self = this;
+          $.ajax('/tasks/delete', {
+            method: 'post',
+            data: {id: $(self).data('id')},
+            success: function() {
+              $(self).closest('.task').remove();
+            }
+          });
+        });
+      }
+    });
+  }
+  );

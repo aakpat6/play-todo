@@ -1,9 +1,9 @@
 define(
   () =>
     task:'''
-    <p>
+    <div class="task">
+    <button class="btn btn-danger btn-delete" data-id="{{ id }}">&times;</button>
     {{ label }}
-    <button class="btn btn-danger">&times;</button>
-    </p>
+    </div>
     '''
 )

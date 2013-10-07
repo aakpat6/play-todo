@@ -4,12 +4,11 @@ import anorm._
 import anorm.SqlParser._
 import play.api.db._
 import play.api.Play.current
-import scala.util.parsing.json.JSONObject
+import play.api.libs.json._
 
 case class Task(id: Long, label: String) {
-  def toJSON(): JSONObject =  {
-    val result = Map("id" -> id, "label" -> label)
-    return JSONObject(result)
+  def toJSON(): JsObject = {
+    return Json.obj("id" -> id, "label" -> label)
   }
 }
 
