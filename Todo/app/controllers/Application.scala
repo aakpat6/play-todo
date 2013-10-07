@@ -8,11 +8,8 @@ import play.api.mvc.Controller
 import play.api.libs.json._
 
 object Application extends Controller {
-
-  val taskForm = Form("label" -> Forms.nonEmptyText)
-
   def index = Action {
-    Ok(views.html.index(Task.all(), taskForm))
+    Ok(views.html.index())
   }
 
   def getTasks = Action {
@@ -21,12 +18,14 @@ object Application extends Controller {
   }
 
   def newTask = Action { implicit request =>
-    taskForm.bindFromRequest fold (
-      errors => BadRequest(views.html.index(Task.all(), errors)),
-      label => {
-        Task create label
-        Redirect(routes.Application.index)
-      })
+    val params = request.body.asFormUrlEncoded
+    val label = params.get("label")(0)
+    if (label.length() > 0) {
+      Task.create(label)
+    } else {
+      BadRequest("")
+    }
+    Ok("")
   }
 
   def deleteTask = Action { request =>

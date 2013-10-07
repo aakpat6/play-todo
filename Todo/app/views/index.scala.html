@@ -1,4 +1,4 @@
-@(tasks: List[Task], taskForm: Form[String])
+@()
 
 @import helper._
 
@@ -10,8 +10,8 @@
 
   <h2>Add a new task</h2>
 
-  @form(routes.Application.newTask, 'method -> "post") {
-    @inputText(taskForm("label"))
+  @form(routes.Application.newTask, 'method -> "post", 'class -> "form-add") {
+    <input type="text" name="label" required>
     <input type="submit" value="Create">
   }
 </div>
