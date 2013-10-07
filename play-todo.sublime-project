@@ -8,13 +8,15 @@
         ".settings",
         ".target",
         "bin",
-        "target"
+        "target",
+        "logs"
       ],
       "file_exclude_patterns":
       [
         ".cache",
         ".classpath",
-        ".project"
+        ".project",
+        "build.properties"
       ]
     }
   ],

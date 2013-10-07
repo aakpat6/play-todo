@@ -1,10 +1,10 @@
 package controllers
 
+import models.Task
 import play.api.data.Form
 import play.api.data.Forms
 import play.api.mvc.Action
 import play.api.mvc.Controller
-import models.Task
 
 object Application extends Controller {
 

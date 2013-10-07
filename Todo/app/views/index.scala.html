@@ -3,6 +3,7 @@
 @import helper._
 
 @main("Todo list") {
+<div class="jumbotron container">
   <h1>@tasks.size task(s)</h1>
     <ul>
     @tasks.map { task =>
@@ -21,4 +22,5 @@
     @inputText(taskForm("label"))
     <input type="submit" value="Create">
   }
+</div>
 }
