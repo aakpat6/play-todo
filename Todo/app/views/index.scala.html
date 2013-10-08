@@ -4,15 +4,19 @@
 
 @main("Todo list") {
 <div class="jumbotron container">
-  <div class="tasks">
+  <h1>Todo List - Play</h1> <br>
 
+  <div class="tasks">
   </div>
 
-  <h2>Add a new task</h2>
+  <hr>
 
   @form(routes.Application.newTask, 'method -> "post", 'class -> "form-add") {
-    <input type="text" name="label" required>
-    <input type="submit" value="Create">
+    <legend>Add a task</legend>
+    <div class="col-lg-4">
+      <input type="text" name="label" class="form-control col-lg-4" required>
+    <input type="submit" value="Create" class="btn btn-default">
+    </div>
   }
 </div>
 }
