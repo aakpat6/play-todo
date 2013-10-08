@@ -19,9 +19,17 @@ object Task {
     }
   }
 
-  def create(label: String) {
+  def create(label: String): Task = {
     DB.withConnection { implicit c =>
-      SQL("INSERT INTO tasks (label) VALUES ({label})") on ('label -> label) executeUpdate ()
+      val query = SQL("""
+          INSERT INTO tasks (label)
+          VALUES ({label})
+          """) on ('label -> label)
+      val id = query.executeInsert()
+      id match {
+        case None => return null
+        case Some(id) => return Task(id, label)
+      }
     }
   }
 

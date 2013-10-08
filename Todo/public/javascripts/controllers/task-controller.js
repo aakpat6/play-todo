@@ -1,6 +1,7 @@
 define(function(require) {
-  function TaskController() {
+  function TaskController(container) {
     this.tasks = [];
+    this.container = $(container);
     this.loadTasks();
   }
 
@@ -10,37 +11,51 @@ define(function(require) {
       method: 'get',
       success: function(result) {
         self.tasks = JSON.parse(result);
-        $('.tasks').html(self.generateHtml());
-        $('.btn-delete').click(function() {
-          var t = $(this).closest('.task');
-          self.deleteTask($(this).data('id'), function() {
-            t.remove();
-          });
-        });
+        self.renderTasks();
       }
     });
   };
 
-  TaskController.prototype.deleteTask = function(id, callback) {
+  TaskController.prototype.deleteTask = function(taskContainer, id) {
     var self = this;
-    $.ajax('/tasks/delete', {
-      method: 'post',
+    $.ajax('/tasks', {
+      method: 'delete',
       data: {id: id},
-      success: function() {
-        self.loadTasks();
-        callback();
+      success: function(result) {
+        self.tasks = JSON.parse(result);
+        $(taskContainer).slideUp(function() {
+          $(this).remove();
+        });
       }
     });
   };
 
   TaskController.prototype.createTask = function(label) {
     var self = this;
+    var Templates = require('templates');
     $.ajax('/tasks', {
       method: 'post',
       data: {label: label},
-      success: function() {
-        self.loadTasks();
+      success: function(result) {
+        var task = JSON.parse(result);
+        self.tasks.push(task);
+        var taskView = $(Mustache.render(Templates.task, task)).hide();
+        self.container.append(taskView);
+        taskView.slideDown();
+        $('.btn-delete').click(function() {
+          var t = $(this).closest('.task');
+          self.deleteTask(t, $(this).data('id'));
+        });
       }
+    });
+  };
+
+  TaskController.prototype.renderTasks = function() {
+    var self = this;
+    self.container.html(self.generateHtml());
+    $('.btn-delete').click(function() {
+      var t = $(this).closest('.task');
+      self.deleteTask($(this).data('id'));
     });
   };
 

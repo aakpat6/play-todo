@@ -17,7 +17,7 @@ requirejs.config({
 define(function(require) {
   var TaskController = require('taskController');
 
-  var taskController = new TaskController();
+  var taskController = new TaskController('.tasks');
 
   $('.form-add').submit(function(event) {
     event.preventDefault();
