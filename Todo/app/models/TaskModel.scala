@@ -12,19 +12,20 @@ case class Task(id: Long, label: String) {
   }
 }
 
-object Task {
-  def all(): List[Task] = DB.withConnection { implicit c =>
-    SQL("SELECT * FROM tasks") as (long("id") ~ str("label") *) map {
-      case id ~ label => Task(id, label)
-    }
+object TaskModel {
+  def all(): List[Task] = DB.withConnection {
+    (implicit c =>
+      SQL("SELECT * FROM tasks") as (long("id") ~ str("label") *) map {
+        case id ~ label => Task(id, label)
+      })
   }
 
   def create(label: String): Task = {
     DB.withConnection { implicit c =>
       val query = SQL("""
-          INSERT INTO tasks (label)
-          VALUES ({label})
-          """) on ('label -> label)
+        INSERT INTO tasks (label)
+        VALUES ({label})
+        """) on ('label -> label)
       val id = query.executeInsert()
       id match {
         case None => return null

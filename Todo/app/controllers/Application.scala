@@ -1,6 +1,6 @@
 package controllers
 
-import models.Task
+import models.TaskModel
 import play.api.data.Form
 import play.api.data.Forms
 import play.api.mvc.Action
@@ -13,7 +13,7 @@ object Application extends Controller {
   }
 
   def getTasks = Action {
-    val labels = Task.all() map (_.toJSON)
+    val labels = TaskModel.all() map (_.toJSON)
     Ok(Json.stringify(JsArray(labels)))
   }
 
@@ -21,7 +21,7 @@ object Application extends Controller {
     val params = request.body.asFormUrlEncoded
     val label = params.get("label")(0)
     if (label.length() > 0) {
-      val task = Task.create(label)
+      val task = TaskModel.create(label)
       Ok(Json.stringify(task.toJSON()))
     } else {
       BadRequest("")
@@ -31,8 +31,8 @@ object Application extends Controller {
   def deleteTask = Action { request =>
     val params = request.body.asFormUrlEncoded
     val id: Long = params.get("id")(0).toLong
-    Task.delete(id)
-    val labels = Task.all() map (_.toJSON)
+    TaskModel.delete(id)
+    val labels = TaskModel.all() map (_.toJSON)
     Ok(Json.stringify(JsArray(labels)))
   }
 }
