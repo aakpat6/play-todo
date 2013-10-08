@@ -16,7 +16,8 @@
         ".cache",
         ".classpath",
         ".project",
-        "build.properties"
+        "build.properties",
+        "*.sublime-workspace"
       ]
     }
   ],

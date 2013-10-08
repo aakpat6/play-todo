@@ -13,15 +13,10 @@ case class Task(id: Long, label: String) {
 }
 
 object Task {
-  val task = {
-    get[Long]("id") ~
-      get[String]("Label") map {
-        case id ~ label => Task(id, label)
-      }
-  }
-
   def all(): List[Task] = DB.withConnection { implicit c =>
-    SQL("SELECT * FROM tasks").as(task *)
+    SQL("SELECT * FROM tasks") as (long("id") ~ str("label") *) map {
+      case id ~ label => Task(id, label)
+    }
   }
 
   def create(label: String) {
